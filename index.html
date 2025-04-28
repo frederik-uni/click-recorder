@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Click Recorder</title>
+<style>
+  body {
+    margin: 0;
+    overflow: hidden;
+    background-color: #f0f0f0;
+    position: relative;
+    font-family: Arial, sans-serif;
+  }
+  .dot {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: red;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  #download-btn {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background: #008CBA;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000;
+  }
+</style>
+</head>
+<body>
+
+<script>
+let clicks = [];
+
+document.addEventListener('click', function(e) {
+    // Create a dot
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    dot.style.left = `${e.pageX}px`;
+    dot.style.top = `${e.pageY}px`;
+    document.body.appendChild(dot);
+
+    // Record the click position
+    clicks.push({ x: e.pageX, y: e.pageY });
+});
+
+// Download clicks as JSON file
+document.getElementById('download-btn').addEventListener('click', function() {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(clicks, null, 2));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "clicks.json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+});
+</script>
+
+</body>
+</html>
